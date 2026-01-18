@@ -1,44 +1,46 @@
-# 🎭 AI-Powered Roleplay Training Simulator
+🎭 AI-Powered Roleplay Training Simulator
+An interactive training platform that transforms static PDF manuals into dynamic, high-pressure roleplay scenarios. Uses Local LLMs (Llama 3) to simulate difficult customers and automated grading agents to score employee performance.
 
-Transform passive PDF manuals into dynamic, high-pressure roleplay scenarios using Multi-Agent AI.
+🏗️ Architecture
+This system uses a Stateful Multi-Agent workflow orchestrated by LangGraph. The workflow transitions between specific "modes" (Setup, Simulation, Evaluation) to create a complete training loop.
 
-## 🚀 The Problem vs. The Solution
+Code snippet
+graph TD
+    Upload("📄 PDF Manual Upload") --> DB("🔍 Vector Store (ChromaDB)")
+    Start("🚀 Start Simulation") --> Architect["🏗️ Architect Agent"]
+    DB --> Architect
+    Architect --> Actor["🎭 Actor Agent (The 'Customer')"]
+    
+    Actor <-->|Chat Loop| User("👤 Trainee")
+    
+    User -->|End Session| Coach{"👮 Coach Agent"}
+    DB --> Coach
+    Coach -->|Grading Logic| Report("📊 Final Scorecard")
+    
+    subgraph "Frontend Interface"
+    User --> UI["Streamlit Dashboard"]
+    Report --> UI
+    end
+✨ Features
+🧠 Behavioral Simulation: The Actor Agent adopts a specific persona (e.g., "Angry VIP", "Confused Senior") to test user soft skills dynamically.
 
-**The Old Way:** Companies hand new employees a 50-page PDF "policy manual" and hope they read it. Training is passive, boring, and untracked.
+📚 RAG-Based Compliance: Retrieves specific policy clauses from your uploaded PDF (via ChromaDB) to ensure the AI "Coach" grades based on your actual rules.
 
-**The Solution:** This engine ingests that PDF and spawns an AI Actor that forces the user to apply the rules in a realistic chat simulation.
+⚖️ Automated Grading: The Coach Agent reviews the chat logs after the session, citing specific page numbers where the user passed or failed protocols.
 
-*   Is the user rude? The AI customer gets angrier.
-*   Did the user break a rule? The AI Coach detects it instantly and grades them.
+🔒 Privacy First: Designed to run entirely with Local LLMs (Ollama) — sensitive training data never leaves your infrastructure.
 
-## ⚙️ How It Works (Agentic Architecture)
+⚡ Real-Time Feedback: Instant feedback loops compared to traditional passive reading or manual peer review.
 
-This project uses a **LangGraph Multi-Agent System** grounded in **RAG (Retrieval Augmented Generation)**.
+🚀 Quick Start
+Prerequisites
+Python 3.10+ installed.
 
-1.  **The Architect:** Scans the uploaded manual, identifies "trap" clauses (e.g., "No ID, No Cash"), and designs a scenario to test them.
-2.  **The Actor (Llama 3):** Plays the role of the difficult customer. It maintains a consistent persona and reacts dynamically to user sentiment.
-3.  **The Coach:** Analyzes the chat logs post-simulation. It cites specific page numbers from the PDF where the user adhered to or violated policy.
+Ollama running locally with llama3 pulled.
 
-## 🛠️ Tech Stack
-
-*   **Orchestration:** LangGraph (Stateful Multi-Agent Workflows)
-*   **LLM Engine:** Ollama (Running Llama 3 8B locally)
-*   **Vector Database:** ChromaDB (For RAG/Knowledge retrieval)
-*   **Backend:** FastAPI
-*   **Frontend:** Streamlit
-*   **Document Parsing:** PyPDF
-
-## ⚡ Quick Start Guide
-
-### Prerequisites
-*   Python 3.10+
-*   Ollama installed and running (`ollama run llama3`)
-
-### 1. Setup
-
-```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/ai-scenario-trainer.git
+1. Clone & Configure
+Bash
+git clone https://github.com/BhavyaKheni08/ai-scenario-trainer.git
 cd ai-scenario-trainer
 
 # Create virtual environment
@@ -47,46 +49,39 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
-```
+2. Start the Backend (API)
+The FastAPI server handles the LangGraph workflow and State management.
 
-### 2. Run the System
-
-You need two terminals open:
-
-**Terminal 1: The Backend API**
-```bash
+Bash
 uvicorn app.main:app --reload
-```
+API will be available at http://localhost:8000/docs
 
-**Terminal 2: The Frontend UI**
-```bash
+3. Start the Frontend (UI)
+Launch the interactive training dashboard in a new terminal.
+
+Bash
 streamlit run ui/app.py
-```
+Access the dashboard at http://localhost:8501
 
-### 3. Usage
+🛠️ Usage Guide
+Upload Policy: Go to the sidebar and upload a PDF (e.g., Bank_Teller_Manual.pdf).
 
-1.  Open http://localhost:8501.
-2.  Upload a Training Manual PDF (e.g., Bank Policy Doc).
-3.  Click "**Start New Simulation**".
-4.  Chat with the AI "Customer" who will try to pressure you into breaking the rules.
-5.  Click "**End & Grade**" to see if you passed.
+Initialize: Click "Start Simulation". The Architect Agent will read the PDF and generate a "Trap Scenario" (e.g., a customer demanding a cash withdrawal without ID).
 
-## 📂 Project Structure
+Roleplay: Chat with the AI. Try to de-escalate the situation without breaking the rules defined in the PDF.
 
-```bash
+Evaluation: Click "End & Grade". The Coach Agent will analyze your transcript and give you a score (0-10) with specific feedback.
+
+🧪 Project Structure
+Bash
 ai-scenario-trainer/
 ├── app/
-│   ├── agents/          # LangGraph Nodes & State Logic
-│   ├── api/             # FastAPI Endpoints
-│   ├── services/        # RAG & Vector DB Logic
-│   ├── schemas/         # Pydantic Models 
-│   └── main.py          # App Entry Point
-├── data/                # Local storage for ChromaDB & PDFs
-├── ui/                  # Streamlit Interface
-├── requirements.txt
-└── README.md
-```
-
-## 📜 License
-
-MIT License.
+│   ├── agents/          # LangGraph Nodes (Architect, Actor, Coach)
+│   ├── api/             # FastAPI Routes
+│   ├── services/        # RAG & PDF Ingestion Logic
+│   └── main.py          # Application Entry Point
+├── data/                # Vector Store persistence
+├── ui/                  # Streamlit Interface code
+└── requirements.txt     # Python Dependencies
+📜 License
+Distributed under the MIT License. See LICENSE for more information.
