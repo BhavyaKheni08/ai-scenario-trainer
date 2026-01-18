@@ -28,6 +28,7 @@ graph TD
     
     Coach -->|Pass/Fail Logic| Report("📊 Final Scorecard")
     Report --> UI
+```
 ✨ Features
 🧠 Behavioral Simulation: The Actor Agent adopts a specific persona (e.g., "Angry VIP", "Confused Senior") to test user soft skills dynamically.
 
@@ -47,7 +48,7 @@ Ollama running locally with llama3 pulled.
 
 1. Clone & Configure
 Bash
-git clone [https://github.com/BhavyaKheni08/ai-scenario-trainer.git](https://github.com/BhavyaKheni08/ai-scenario-trainer.git)
+git clone https://github.com/BhavyaKheni08/ai-scenario-trainer.git
 cd ai-scenario-trainer
 
 # Create virtual environment
