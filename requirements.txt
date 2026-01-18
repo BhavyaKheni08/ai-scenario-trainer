@@ -1,0 +1,12 @@
+fastapi
+uvicorn
+langgraph
+langchain
+langchain-community
+langchain-openai
+langchain-ollama
+chromadb
+pypdf
+python-multipart
+streamlit
+python-dotenv
